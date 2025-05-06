@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Currículos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: inline-block;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .download-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .download-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-buttons button.pdf-button {
+            background-color: #dc3545; /* Vermelho */
+            color: #fff;
+        }
+
+        .download-buttons button.pdf-button:hover {
+            background-color: #c82333;
+        }
+
+        .download-buttons button.html-button {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+        }
+
+        .download-buttons button.html-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#dados-pessoais">Dados Pessoais</a></li>
+                <li><a href="#experiencia">Experiência Profissional</a></li>
+                <li><a href="#formacao">Formação Acadêmica</a></li>
+                <li><a href="#habilidades">Habilidades</a></li>
+                <li><a href="#idiomas">Idiomas</a></li>
+                <li><a href="#adicionais">Informações Adicionais</a></li>
+            </ul>
+        </nav>
+
+        <h1>Crie seu Currículo</h1>
+        <form id="resumeForm" action="gerar_curriculo.php" method="post">
+            <section id="dados-pessoais">
+                <h2>Dados Pessoais</h2>
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" required><br><br>
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email"><br><br>
+
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" name="telefone"><br><br>
+
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco"><br><br>
+            </section>
+
+            <section id="experiencia">
+                <h2>Experiência Profissional</h2>
+                <div class="experiencia-item">
+                    <label for="empresa1">Empresa:</label>
+                    <input type="text" id="empresa1" name="empresa[]"><br><br>
+                    <label for="cargo1">Cargo:</label>
+                    <input type="text" id="cargo1" name="cargo[]"><br><br>
+                </div>
+                <button type="button" id="addExperiencia">Adicionar Mais Experiência</button>
+            </section>
+
+            <section id="formacao">
+                <h2>Formação Acadêmica</h2>
+                <div class="formacao-item">
+                    <label for="instituicao1">Instituição:</label>
+                    <input type="text" id="instituicao1" name="instituicao[]"><br><br>
+                    <label for="curso1">Curso:</label>
+                    <input type="text" id="curso1" name="curso[]"><br><br>
+                </div>
+                <button type="button" id="addFormacao">Adicionar Mais Formação</button>
+            </section>
+
+            <section id="habilidades">
+                <h2>Habilidades</h2>
+                <label for="habilidade1">Habilidade:</label>
+                <input type="text" id="habilidade1" name="habilidade[]"><br><br>
+                <button type="button" id="addHabilidade">Adicionar Mais Habilidade</button>
+            </section>
+
+            <section id="idiomas">
+                <h2>Idiomas</h2>
+                <div class="idioma-item">
+                    <label for="lingua1">Língua:</label>
+                    <input type="text" id="lingua1" name="lingua[]"><br><br>
+                    <label for="nivel1">Nível:</label>
+                    <input type="text" id="nivel1" name="nivel[]"><br><br>
+                </div>
+                <button type="button" id="addIdioma">Adicionar Mais Idioma</button>
+            </section>
+
+            <section id="adicionais">
+                <h2>Informações Adicionais</h2>
+                <label for="informacao_adicional">Informação:</label>
+                <textarea id="informacao_adicional" name="informacao_adicional" rows="4" cols="50"></textarea><br><br>
+            </section>
+
+            <div class="download-buttons">
+                <button type="submit" class="pdf-button" name="acao" value="gerar_pdf">Gerar PDF</button>
+                <button type="submit" class="html-button" name="acao" value="gerar_html">Baixar HTML</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Adicionar experiência profissional
+            $("#addExperiencia").click(function() {
+                var newItem = $(".experiencia-item:first").clone();
+                newItem.find("input").val("");
+                $("#experiencia").append(newItem);
+            });
+
+            // Adicionar formação acadêmica
+            $("#addFormacao").click(function() {
+                var newItem = $(".formacao-item:first").clone();
+                newItem.find("input").val("");
+                $("#formacao").append(newItem);
+            });
+
+            // Adicionar habilidade
+            $("#addHabilidade").click(function() {
+                var newItem = $("#habilidades label:first").next("input").clone();
+                newItem.val("");
+                $("#habilidades").append("<br><br>").append($("#habilidades label:first").clone()).append(newItem);
+            });
+
+            // Adicionar idioma
+            $("#addIdioma").click(function() {
+                var newItem = $(".idioma-item:first").clone();
+                newItem.find("input").val("");
+                $("#idiomas").append(newItem);
+            });
+        });
+    </script>
+</body>
+</html>
